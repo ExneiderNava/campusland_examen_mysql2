@@ -25,11 +25,12 @@ create table if not exists reservas_externas(
 -- Creo un indice para optimización
 create index idx_reserva_ext_estado_espacio on reservas_externas(espacio_id, fecha_reserva);
 
--- al trabajar con procedimientos debemos cambiar el delimitador
-DELIMITER $$
 
 -- validacion
 drop procedure if exists sp_importar_reserva_externa;
+
+-- al trabajar con procedimientos debemos cambiar el delimitador
+DELIMITER $$
 
 -- Creamos el procedimiento
 create procedure sp_importar_reserva_externa(
@@ -49,11 +50,11 @@ begin
     select
 		'CC',
         'comun',
-        'usuario_externo',
+        usuario_externo,
         'usuario',
-        'plataforma',
+        plataforma,
         '2000-01-01',
-        'usurioexterno@externo.com'
+        CONCAT(usuario_externo, '@externo.com')
 	from reservas_externas
     where id = p_id_externo;
     
@@ -124,7 +125,7 @@ call sp_importar_reserva_externa(1);
 
 -- evidencia
 
-select * from reserva where fecha_reserva = 2026-12-01;
+select * from reserva where fecha_reserva = '2026-12-01';
 
 -- Prueba de conflicto
 
